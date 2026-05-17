@@ -1,2 +1,2 @@
 # Call-Me-Maybe
-a function calling in LLM (large language model)
+a function calling LLM (large language model)
