@@ -1,6 +1,13 @@
 from .llm_sdk import Small_LLM_Model
-from . import model
-llm_client = model.LLMClient()
-tokens = llm_client.encode_ids("gegegeeggg 021 kkam")
 
-print(tokens)
+
+from .func_agent import FunctionCallingAgent, tool
+from .model import LLMClient
+
+
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
+

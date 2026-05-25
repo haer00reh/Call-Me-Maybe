@@ -13,10 +13,7 @@ class LLMClient:
         try:
             lst = ids.tolist()
         except Exception:
-            try:
-                lst = list(ids)
-            except Exception:
-                raise TypeError("model.encode returned an unsupported type")
+            raise TypeError("model.encode returned an unsupported type")
         if lst and isinstance(lst[0], (list, tuple)):
             lst = lst[0]
         return [int(x) for x in lst]
@@ -26,3 +23,4 @@ class LLMClient:
             raise TypeError("tokens must be iterable of ints")
         tokens_list = [int(x) for x in tokens]
         return self.model.decode(tokens_list)
+    
