@@ -1,8 +1,8 @@
 import inspect
 import json
 from typing import Any, Callable, Dict, List
-
-from .model import LLMClient
+from utils import parse_json
+from model import LLMClient
 
 
 def tool(func: Callable) -> Callable:
@@ -13,24 +13,7 @@ def tool(func: Callable) -> Callable:
     """
     func._is_tool = True
     func._tool_name = func.__name__
-    sig = inspect.signature(func)
-    docstring = inspect.getdoc(func) or "No description available."
 
-    func._tool_metadata = {
-        "name": func._tool_name,
-        "description": docstring.strip(),
-        "parameters": {
-            "type": "object",
-            "properties": {
-                name: {"type": "string"}
-                for name, param in sig.parameters.items()
-            },
-            "required": [
-                name for name, param in sig.parameters.items()
-                if param.default == inspect.Parameter.empty
-            ],
-        },
-    }
     return func
 
 
@@ -42,6 +25,9 @@ class FunctionCallingAgent:
     def __init__(self, llm_client: LLMClient):
         self.llm_client = llm_client
         self._tools: Dict[str, Callable] = {}
+        self.defines = parse_json("io/input/functions_definition.json")
+        self.prompts = parse_json("io/input/function_calling_tests.json")
+
 
     def register_tool(self, func: Callable):
         """
@@ -58,7 +44,7 @@ class FunctionCallingAgent:
         for t in tools:
             self.register_tool(t)
 
-    def _format_prompt(self, user_query: str) -> str:
+    def _format_prompt(self) -> str:
         """
         Formats the prompt with a system message, tool definitions, and the user query.
         """
@@ -70,15 +56,10 @@ class FunctionCallingAgent:
             "The `arguments` must be a dictionary of parameter names to values.\n\n"
             "If you have the answer, respond with the answer directly."
         )
-
-        tool_definitions = [
-            tool._tool_metadata for tool in self._tools.values()
-        ]
-
         prompt = (
             f"{console_prompt}\n\n"
-            f"Available Tools:\n{json.dumps(tool_definitions, indent=2)}\n\n"
-            f"User Query: {user_query}"
+            f"available tools defines\n: {self.defines}\n\n"
+            f"User queries:\n{" \n".join([item['prompt'] for item in self.prompts])}"
         )
         return prompt
 

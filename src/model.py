@@ -1,5 +1,5 @@
 from typing import Any, Iterable, List, Optional, Sequence
-from .llm_sdk import Small_LLM_Model
+from llm_sdk import Small_LLM_Model
 
 
 class LLMClient:
