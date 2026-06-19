@@ -6,17 +6,14 @@ class LLMClient:
     def __init__(self, model: Optional[Any] = None):
         self.model = model if model is not None else Small_LLM_Model()
 
-    def encode_ids(self, text: str) -> List[int]:
-        if not isinstance(text, str):
-            raise TypeError("text must be a str")
-        ids = self.model.encode(text)
-        try:
-            lst = ids.tolist()
-        except Exception:
-            raise TypeError("model.encode returned an unsupported type")
-        if lst and isinstance(lst[0], (list, tuple)):
-            lst = lst[0]
-        return [int(x) for x in lst]
+    def encode_ids(self, lst: list) -> List[int]:
+        if not isinstance(lst, list):
+            raise TypeError("lst must be a list")
+        ids = []
+        for char in lst:
+            ids.append(self.model.encode(char)[0].tolist()[0])
+        return ids
+
 
     def decode_ids(self, tokens: Sequence[int]) -> str:
         if not hasattr(tokens, "__iter__"):

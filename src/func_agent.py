@@ -22,8 +22,8 @@ class FunctionCallingAgent:
     the agent that can use an LLM to reason about and call external functions (tools).
     """
 
-    def __init__(self, llm_client: LLMClient):
-        self.llm_client = llm_client
+    def __init__(self):
+        self.llm_client = LLMClient()
         self._tools: Dict[str, Callable] = {}
         self.defines = parse_json("io/input/functions_definition.json")
         self.prompts = parse_json("io/input/function_calling_tests.json")
@@ -58,11 +58,24 @@ class FunctionCallingAgent:
         )
         prompt = (
             f"{console_prompt}\n\n"
-            f"available tools defines\n: {self.defines}\n\n"
-            f"User queries:\n{" \n".join([item['prompt'] for item in self.prompts])}"
+            f"available tools defines:\n{self.defines}\n\n"
+            f"User queries:\n" + "\n".join(item['prompt'] for item in self.prompts)
         )
         return prompt
+    
+    def allowed_tokens(self) -> list:
+        f_names = [f["name"] for f in self.defines]
+        param_names = set()
+        for f in self.defines:
+            param_names.update(f.get("parameters", {}).keys())
+        char_batch = set("".join(f_names) + "".join(param_names))
+        char_batch |= set('{[}]":,. -') | set("0123456789")
+        char_batch |= set('function') | set("parameter")
 
-    def run(self, user_query: str) -> str:
+        allowed = self.llm_client.encode_ids(list(char_batch))
+        return allowed
+    
+    def run(self, user_query: str, max_new_tokens=250) -> str:
         pass
+
 
