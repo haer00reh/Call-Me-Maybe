@@ -1,42 +1,36 @@
 [
-{
+  {
     "name": "fn_add_numbers",
     "description": "Add two numbers together and return their sum.",
     "parameters": {
-        "a": {
-            "type": "number"
-         },
-        "b": {
-            "type": "number"
-        }
+      "a": {"type": "number"},
+      "b": {"type": "number"}
     },
-    "returns": {
-    "type": "number"
-    }
-},
-
-{
+    "returns": {"type": "number"}
+  },
+  {
     "name": "fn_greet",
     "description": "Generate a greeting message for a person by name.",
     "parameters": {
-    "name": {
-            "type": "string"
-        }
+      "name": {"type": "string"}
     },
-    "returns": {
-        "type": "string"
-    }
-},
-{
-    "name": "get_current_weather",
-    "description": "returns the current weather in °C",
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_divide",
+    "description": "Divide two numbers and return the result rounded to 2 decimal places.",
     "parameters": {
-        "city": {
-            "type": "string"
-        }
+      "a": {"type": "number"},
+      "b": {"type": "number"}
     },
-    "returns": "string"
-}
-
-
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "get_current_weather",
+    "description": "Returns the current weather conditions for a given city.",
+    "parameters": {
+      "city": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  }
 ]

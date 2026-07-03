@@ -1,4 +1,4 @@
-from .func_agent import tool
+from func_agent import tool
 
 @tool
 def fn_add_numbers(a: int, b: int) -> int:
@@ -7,6 +7,11 @@ def fn_add_numbers(a: int, b: int) -> int:
 @tool
 def fn_greet(name: str):
     return f"Greetings!, {name}!"
+
+@tool
+def fn_divide(a: int, b: int) -> float:
+    return round(a % b, 2)
+
 
 @tool
 def get_current_weather(city: str):
