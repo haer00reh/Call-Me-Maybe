@@ -87,9 +87,13 @@ class FunctionCallingAgent:
             'User query: "What is the weather in paris?"\n'
             'Response: {"function":"get_current_weather","parameter":{"city":"paris"}}\n\n'
         )
+        slim_defines = [
+            {"name": f["name"], "parameters": f["parameters"]}
+            for f in self.defines
+        ]
         return (
             f"{console_prompt}\n\n"
-            f"available tools defines:\n{self.defines}\n\n"
+            f"available tools defines:\n{slim_defines}\n\n"
             f"User query: {user_query}\n"
             f"Response:"
         )
@@ -165,7 +169,7 @@ class FunctionCallingAgent:
             return self._ids('"')
 
         if state.phase == Phase.WRITING_PARAM_VALUE_STRING_CHARS:
-            if len(state.param_value_written) >= 30:
+            if len(state.param_value_written) >= 15:
                 return self._ids('"')
             if len(state.param_value_written) < 2:
                 return self._ids("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -178,7 +182,7 @@ class FunctionCallingAgent:
             func_def = next(f for f in self.defines if f["name"] == state.chosen_function)
             param_names = list(func_def["parameters"].keys())
             total_params = len(param_names)
-            if len(state.param_value_written) >= 10:
+            if len(state.param_value_written) >= 5:
                 if state.current_param_index < total_params - 1:
                     return self._ids(",")
                 return self._ids("}")
@@ -317,7 +321,7 @@ class FunctionCallingAgent:
         elif state.phase == Phase.CLOSE_ROOT_OBJ:
             state.phase = Phase.DONE
 
-    def run(self, user_query: str, max_new_tokens: int = 200) -> str:
+    def run(self, user_query: str, max_new_tokens: int = 80) -> str:
         self.fsm = FSMState()
         prompt = self._format_prompt(user_query)
         input_ids = self.llm_client.encode(prompt)
