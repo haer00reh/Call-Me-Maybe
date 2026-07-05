@@ -9,27 +9,10 @@
     "returns": {"type": "number"}
   },
   {
-    "name": "fn_greet",
-    "description": "Generate a greeting message for a person by name.",
+    "name": "fn_reverse_string",
+    "description": "reverse a string",
     "parameters": {
-      "name": {"type": "string"}
-    },
-    "returns": {"type": "string"}
-  },
-  {
-    "name": "fn_divide",
-    "description": "Divide two numbers and return the result rounded to 2 decimal places.",
-    "parameters": {
-      "a": {"type": "number"},
-      "b": {"type": "number"}
-    },
-    "returns": {"type": "number"}
-  },
-  {
-    "name": "get_current_weather",
-    "description": "Returns the current weather conditions for a given city.",
-    "parameters": {
-      "city": {"type": "string"}
+      "s": {"type": "string"}
     },
     "returns": {"type": "string"}
   }

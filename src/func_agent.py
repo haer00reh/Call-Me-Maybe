@@ -67,35 +67,17 @@ class FunctionCallingAgent:
 
     def _format_prompt(self, user_query: str) -> str:
         console_prompt = (
-            "You are a helpful assistant with access to the following tools. "
-            "To answer the user's question, you can choose to use a tool. "
-            "If you decide to use a tool, you must respond with a JSON object with "
-            'the key "function" containing the function name as a string, '
-            'and "parameter" containing a dictionary of parameter names to values.\n\n'
-            "If you have the answer, respond with the answer directly.\n\n"
-            "Example:\n"
-            'User query: "greet albert"\n'
-            'Response: {"function":"fn_greet","parameter":{"name":"albert"}}\n\n'
-            'User query: "What is the sum of 3 and 5?"\n'
-            'Response: {"function":"fn_add_numbers","parameter":{"a":3,"b":5}}\n\n'
-            'User query: "greet albert"\n'
-            'Response: {"function":"fn_greet","parameter":{"name":"albert"}}\n\n'
-            'User query: "What is the sum of 3 and 5?"\n'
-            'Response: {"function":"fn_add_numbers","parameter":{"a":3,"b":5}}\n\n'
-            'User query: "Divide 10 by 3"\n'
-            'Response: {"function":"fn_divide","parameter":{"a":10,"b":3}}\n\n'
-            'User query: "What is the weather in paris?"\n'
-            'Response: {"function":"get_current_weather","parameter":{"city":"paris"}}\n\n'
+        "Use the correct tool for the user's query. Respond only with JSON.\n\n"
+        "Tools:\n"
+        + "\n".join(f'- {f["name"]}: {f["description"]}' for f in self.defines)
+        + "\n\n"
+        "Examples:\n"
+        'User query: "divide 10 by 3"\n'
+        '{"function":"fn_divide","parameter":{"a":10,"b":3}}\n'
         )
-        slim_defines = [
-            {"name": f["name"], "parameters": f["parameters"]}
-            for f in self.defines
-        ]
         return (
             f"{console_prompt}\n\n"
-            f"available tools defines:\n{slim_defines}\n\n"
             f"User query: {user_query}\n"
-            f"Response:"
         )
 
     def _ids(self, s: str) -> list:
@@ -172,8 +154,8 @@ class FunctionCallingAgent:
             if len(state.param_value_written) >= 15:
                 return self._ids('"')
             if len(state.param_value_written) < 2:
-                return self._ids("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-            return self._ids('"abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.')
+                return self._ids("abcdefghijklmnopqrstuvwxyz")
+            return self._ids('"abcdefghijklmnopqrstuvwxyz')
 
         if state.phase == Phase.WRITING_PARAM_VALUE_STRING_CLOSE:
             return self._ids('"')
@@ -321,7 +303,7 @@ class FunctionCallingAgent:
         elif state.phase == Phase.CLOSE_ROOT_OBJ:
             state.phase = Phase.DONE
 
-    def run(self, user_query: str, max_new_tokens: int = 80) -> str:
+    def run(self, user_query: str, max_new_tokens: int = 70) -> str:
         self.fsm = FSMState()
         prompt = self._format_prompt(user_query)
         input_ids = self.llm_client.encode(prompt)

@@ -1,14 +1,5 @@
 [
   {"prompt": "What is the sum of 4 and 7?"},
   {"prompt": "Add 12 and 88"},
-  {"prompt": "What is 265 plus 345?"},
-  {"prompt": "Greet alice"},
-  {"prompt": "Say hello to john"},
-  {"prompt": "Greet shrek"},
-  {"prompt": "Divide 10 by 3"},
-  {"prompt": "What is 100 divided by 4?"},
-  {"prompt": "Divide 50 by 7"},
-  {"prompt": "What is the current weather in new york?"},
-  {"prompt": "Get the weather in san francisco"},
-  {"prompt": "What is the weather like in tokyo?"}
+  {"prompt": "reverse the string 'bread'"}
 ]

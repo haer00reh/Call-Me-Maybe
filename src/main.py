@@ -12,7 +12,7 @@ def main():
     results = []
     for prompt_item in agent.prompts:
         result = agent.run(prompt_item['prompt'])
-        results.append(result)
+        print(f"prompt: {prompt_item}\nanswer: {result}")
 
     # then you join them with commas yourself
     output = "[" + ",".join(results) + "]"
