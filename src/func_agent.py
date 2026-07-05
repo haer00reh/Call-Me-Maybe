@@ -78,6 +78,14 @@ class FunctionCallingAgent:
             'Response: {"function":"fn_greet","parameter":{"name":"albert"}}\n\n'
             'User query: "What is the sum of 3 and 5?"\n'
             'Response: {"function":"fn_add_numbers","parameter":{"a":3,"b":5}}\n\n'
+            'User query: "greet albert"\n'
+            'Response: {"function":"fn_greet","parameter":{"name":"albert"}}\n\n'
+            'User query: "What is the sum of 3 and 5?"\n'
+            'Response: {"function":"fn_add_numbers","parameter":{"a":3,"b":5}}\n\n'
+            'User query: "Divide 10 by 3"\n'
+            'Response: {"function":"fn_divide","parameter":{"a":10,"b":3}}\n\n'
+            'User query: "What is the weather in paris?"\n'
+            'Response: {"function":"get_current_weather","parameter":{"city":"paris"}}\n\n'
         )
         return (
             f"{console_prompt}\n\n"
