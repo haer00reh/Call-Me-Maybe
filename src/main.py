@@ -8,14 +8,21 @@ import functions
 
 def main():
     agent = FunctionCallingAgent()
-    agent.register_tools([functions.fn_add_numbers, functions.fn_greet, functions.get_current_weather, functions.fn_divide])
+    agent.register_tools([
+        functions.fn_add_numbers,
+        functions.fn_subtract_numbers,
+        functions.fn_multiply_numbers,
+        functions.fn_greet,
+        functions.fn_reverse_string,
+        functions.get_current_weather,
+        functions.fn_divide,
+    ])
     results = []
     for prompt_item in agent.prompts:
-        result = agent.run(prompt_item['prompt'])
-        print(f"prompt: {prompt_item}\nanswer: {result}")
+        results += "".join(agent.run(prompt_item['prompt']))
+        print(results)
 
-    # then you join them with commas yourself
-    output = "[" + ",".join(results) + "]"
+    output = "[" + "".join(results) + "]"
     print(output)
 if __name__ == "__main__":
     main()

@@ -1,7 +1,7 @@
 [
   {
     "name": "fn_add_numbers",
-    "description": "Add two numbers together and return their sum.",
+    "description": "Use ONLY when the user asks to add, sum, plus, total, increase by, or combine two numbers.",
     "parameters": {
       "a": {"type": "number"},
       "b": {"type": "number"}
@@ -9,10 +9,45 @@
     "returns": {"type": "number"}
   },
   {
-    "name": "fn_reverse_string",
-    "description": "reverse a string",
+    "name": "fn_subtract_numbers",
+    "description": "Use ONLY when the user asks to subtract, minus, difference, deduct, take away, or remove one number from another",
     "parameters": {
-      "s": {"type": "string"}
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_multiply_numbers",
+    "description": "Use ONLY when the user asks to multiply, times, product, or repeated multiplication.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_divide",
+    "description": "Use ONLY when the user asks to divide, quotient, split equally, over, or per",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_greet",
+    "description": "returns a friendly greeting",
+    "parameters": {
+      "name": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_reverse_string",
+    "description": "reverses a string",
+    "parameters": {
+      "text": {"type": "string"}
     },
     "returns": {"type": "string"}
   }

@@ -1,16 +1,31 @@
 from func_agent import tool
 
 @tool
-def fn_add_numbers(a: int, b: int) -> int:
+def fn_add_numbers(a: float, b: float) -> float:
     return a + b
+
+
+@tool
+def fn_subtract_numbers(a: float, b: float) -> float:
+    return a - b
+
+
+@tool
+def fn_multiply_numbers(a: float, b: float) -> float:
+    return a * b
 
 @tool
 def fn_greet(name: str):
-    return f"Greetings!, {name}!"
+    return f"Hello, {name}!"
+
 
 @tool
-def fn_divide(a: int, b: int) -> float:
-    return round(a % b, 2)
+def fn_reverse_string(text: str) -> str:
+    return text[::-1]
+
+@tool
+def fn_divide(a: float, b: float) -> float:
+    return round(a / b, 2)
 
 
 @tool
