@@ -17,13 +17,8 @@ def main():
         functions.get_current_weather,
         functions.fn_divide,
     ])
-    results = []
-    for prompt_item in agent.prompts:
-        results += "".join(agent.run(prompt_item['prompt']))
-        print(results)
 
-    output = "[" + "".join(results) + "]"
-    print(output)
+    agent.run()
 if __name__ == "__main__":
     main()
 

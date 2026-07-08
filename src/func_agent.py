@@ -183,7 +183,7 @@ class FunctionCallingAgent:
 
             return generated_tokens, {}
 
-    def run(self, user_query: str, max_new_tokens: int = 70) -> str:
+    def single_run(self, user_query: str, max_new_tokens: int = 70) -> str:
             self.fsm = FSMState()
             prompt = self._format_prompt(user_query)
             generated = self._encode_tokens(prompt)
@@ -213,7 +213,41 @@ class FunctionCallingAgent:
             self.fsm.phase = Phase.DONE
 
             result = {
+                "prompt": user_query,
                 "function": fname,
                 "parameter": output_params,
             }
-            return json.dumps(_normalize_numeric_values(result), separators=(",", ":"))
+            return _normalize_numeric_values(result)
+
+    def run(self, max_new_tokens: int = 70) -> List[dict]:
+        """
+        Iterates over all prompts loaded in self.prompts, executes them,
+        and returns a standard Python list of dictionaries with the target schema.
+        """
+        all_results = []
+        
+        for prompt_data in self.prompts:
+            user_query = prompt_data.get("prompt")
+            if user_query:
+                # Execute the single prompt query
+                execution_result = self.single_run(user_query, max_new_tokens)
+                
+                # Check for errors and handle gracefully
+                if "error" in execution_result:
+                    record = {
+                        "prompt": user_query,
+                        "name": "error",
+                        "parameters": {"message": execution_result["error"]}
+                    }
+                else:
+                    # Construct the record matching your exact target keys
+                    record = {
+                        "prompt": user_query,
+                        "name": execution_result.get("function"),
+                        "parameters": execution_result.get("parameter")
+                    }
+                
+                all_results.append(record)
+                
+        with open("io/output/function_calling_results.json", "w") as f:
+            json.dump(all_results, f, indent=4)

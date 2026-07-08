@@ -1,0 +1,64 @@
+[
+    {
+        "prompt": "multiply 3.5 by 2",
+        "name": "fn_multiply_numbers",
+        "parameters": {
+            "a": 3.5,
+            "b": 2.0
+        }
+    },
+    {
+        "prompt": "what is the sum of 2.5 and 9.25",
+        "name": "fn_add_numbers",
+        "parameters": {
+            "a": 2.5,
+            "b": 9.25
+        }
+    },
+    {
+        "prompt": "subtract 4.5 from 10",
+        "name": "fn_subtract_numbers",
+        "parameters": {
+            "a": 4.5,
+            "b": 10.0
+        }
+    },
+    {
+        "prompt": "multiply 3.5 by 2",
+        "name": "fn_multiply_numbers",
+        "parameters": {
+            "a": 3.5,
+            "b": 2.0
+        }
+    },
+    {
+        "prompt": "divide 10 by 3",
+        "name": "fn_divide",
+        "parameters": {
+            "a": 10.0,
+            "b": 3.0
+        }
+    },
+    {
+        "prompt": "divide 7.5 by 2.5",
+        "name": "fn_divide",
+        "parameters": {
+            "a": 7.5,
+            "b": 2.5
+        }
+    },
+    {
+        "prompt": "greet 'Alice'",
+        "name": "fn_greet",
+        "parameters": {
+            "name": "Alice"
+        }
+    },
+    {
+        "prompt": "reverse 'hello'",
+        "name": "fn_reverse_string",
+        "parameters": {
+            "string": "hello"
+        }
+    }
+]
