@@ -1,9 +1,9 @@
 from pathlib import Path
 import json
-from pydantic import BaseModel, ConfigDict
 
 
 def parse_json(file_path: str | Path) -> dict:
+    """Load and return JSON data from a file path."""
     if not isinstance(file_path, (str, Path)):
         raise TypeError("file_path must be either str or Path object")
     try:

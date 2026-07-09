@@ -1,12 +1,11 @@
+"""Entry point for running the function-calling agent."""
+
 from func_agent import FunctionCallingAgent
-from llm_sdk import Small_LLM_Model
-import json
-import model
 import functions
 
 
-
 def main():
+    """Build the agent, register tools, and execute the prompt batch."""
     agent = FunctionCallingAgent()
     agent.register_tools([
         functions.fn_add_numbers,
@@ -19,6 +18,7 @@ def main():
     ])
 
     agent.run()
+
+
 if __name__ == "__main__":
     main()
-

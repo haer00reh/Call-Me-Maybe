@@ -1,10 +1,22 @@
 from typing import Any, List, Optional, Sequence
+from pydantic import BaseModel, ConfigDict, Field
 from llm_sdk import Small_LLM_Model
 
 
-class LLMClient:
+class LLMClient(BaseModel):
+    """Thin wrapper around the small language model client."""
+
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        validate_assignment=True,
+    )
+
+    model: Any = Field(default_factory=Small_LLM_Model)
+
     def __init__(self, model: Optional[Any] = None):
-        self.model = model if model is not None else Small_LLM_Model()
+        super().__init__(
+            model=model if model is not None else Small_LLM_Model()
+        )
 
     def encode(self, text: str) -> List[int]:
         """Encode a full string into a flat list of token IDs."""
