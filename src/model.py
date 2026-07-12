@@ -18,11 +18,11 @@ class LLMClient(BaseModel):
             model=model if model is not None else Small_LLM_Model()
         )
 
-    def encode(self, text: str) -> List[int]:
+    def encode(self, text: str) -> Any:
         """Encode a full string into a flat list of token IDs."""
         return self.model.encode(text)[0].tolist()
 
-    def encode_ids(self, lst: list) -> List[int]:
+    def encode_ids(self, lst: list) -> Any:
         """Encode a list of characters into a flat list of token IDs."""
         if not isinstance(lst, list):
             raise TypeError("lst must be a list")
@@ -31,12 +31,12 @@ class LLMClient(BaseModel):
             ids.extend(self.model.encode(char)[0].tolist())
         return ids
 
-    def decode(self, tokens: Sequence[int]) -> str:
+    def decode(self, tokens: Sequence[int]) -> Any:
         """Decode a list of token IDs back to a string."""
         if not hasattr(tokens, "__iter__"):
             raise TypeError("tokens must be iterable of ints")
         return self.model.decode([int(x) for x in tokens])
 
-    def get_logits_from_input_ids(self, input_ids: List[int]) -> List[float]:
+    def get_logits_from_input_ids(self, input_ids: List[int]) -> Any:
         """Get logits for the next token given a list of token IDs."""
         return self.model.get_logits_from_input_ids(input_ids)

@@ -1,11 +1,11 @@
 from pathlib import Path
 import json
 from enum import Enum, auto
-from typing import List, Optional
+from typing import List, Optional, Any
 from pydantic import BaseModel, ConfigDict, Field
 
 
-def _normalize_numeric_values(value):
+def _normalize_numeric_values(value: dict[str, Any]) -> dict[str, Any]:
     """Convert integer values in nested structures to floats."""
     if isinstance(value, dict):
         return {
@@ -40,7 +40,7 @@ class FSMState(BaseModel):
     current_value_tokens: List[int] = Field(default_factory=list)
 
 
-def parse_json(file_path: str | Path) -> dict:
+def parse_json(file_path: str | Path) -> Any:
     """Load and return JSON data from a file path."""
     if not isinstance(file_path, (str, Path)):
         raise TypeError("file_path must be either str or Path object")

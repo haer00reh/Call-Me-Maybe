@@ -3,7 +3,7 @@
 from .func_agent import FunctionCallingAgent
 
 
-def main():
+def main() -> None:
     """Build the agent, register tools, and execute the prompt batch."""
     agent = FunctionCallingAgent()
 

@@ -1,5 +1,7 @@
 """LLM SDK helpers for local model inference."""
 
+from typing import cast
+
 from huggingface_hub import hf_hub_download
 import torch
 from transformers import (
@@ -45,20 +47,26 @@ class Small_LLM_Model:
             )
         self._dtype = dtype
 
-        self._tokenizer: PreTrainedTokenizer = AutoTokenizer.from_pretrained(
-            model_name,
-            trust_remote_code=trust_remote_code,
+        self._tokenizer: PreTrainedTokenizer = cast(
+            PreTrainedTokenizer,
+            AutoTokenizer.from_pretrained(
+                model_name,
+                trust_remote_code=trust_remote_code,
+            ),
         )
         if self._tokenizer.pad_token_id is None:
             self._tokenizer.pad_token_id = self._tokenizer.eos_token_id
 
-        self._model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
-            model_name,
-            torch_dtype=self._dtype,
-            device_map="auto" if self._device == "cuda" else None,
-            trust_remote_code=trust_remote_code,
+        self._model: PreTrainedModel = cast(
+            PreTrainedModel,
+            AutoModelForCausalLM.from_pretrained(
+                model_name,
+                torch_dtype=self._dtype,
+                device_map="auto" if self._device == "cuda" else None,
+                trust_remote_code=trust_remote_code,
+            ),
         )
-        self._model.to(self._device)
+        self._model.to(device=self._device)  # type: ignore[call-arg]
         self._model.eval()
 
         for parameter in self._model.parameters():
@@ -80,7 +88,7 @@ class Small_LLM_Model:
         """Decode token ids back into text without special tokens."""
         if isinstance(ids, torch.Tensor):
             ids = ids.tolist()
-        return self._tokenizer.decode(ids, skip_special_tokens=True)
+        return str(self._tokenizer.decode(ids, skip_special_tokens=True))
 
     def get_logits_from_input_ids(
         self,

@@ -5,6 +5,7 @@ from .model import LLMClient
 from .utils import _normalize_numeric_values, parse_json, FSMState, Phase
 import argparse
 from pathlib import Path
+from typing import Any
 
 
 class FunctionCallingAgent:
@@ -83,7 +84,7 @@ class FunctionCallingAgent:
             return [int(token_id) for token_id in token_ids]
         return [int(token_id) for token_id in encoded]
 
-    def _token_text(self, token_id: int) -> str:
+    def _token_text(self, token_id: int) -> Any:
         """Return the decoded text for a token id."""
         return self._token_text_by_id.get(
             token_id,
@@ -205,7 +206,8 @@ class FunctionCallingAgent:
 
         return generated_tokens, {}
 
-    def single_run(self, user_query: str, max_new_tokens: int = 70) -> str:
+    def single_run(self, user_query: str,
+                   max_new_tokens: int = 70) -> Any:
         """Run a single prompt through the function-calling pipeline."""
         self.fsm = FSMState()
         prompt = self._format_prompt(user_query)
@@ -222,15 +224,17 @@ class FunctionCallingAgent:
             max_tokens=max_new_tokens,
         )
         if not fname:
-            return "Error: model failed to select a function."
-
+            return {
+                "error": "model failed to select a function"
+            }
         func_def = next(
             (f for f in self.defines if f["name"] == fname),
             None,
         )
         if func_def is None:
-            return f"Error: unknown function '{fname}'."
-
+            return {
+                "error": f"unknown function '{fname}'"
+            }
         generated = self._append_tokens(generated, self._quote_tokens)
         generated = self._append_tokens(generated, self._comma_tokens)
         generated = self._append_tokens(generated, self._parameter_key_tokens)
@@ -251,9 +255,10 @@ class FunctionCallingAgent:
         }
         return _normalize_numeric_values(result)
 
-    def run(self, max_new_tokens: int = 70) -> List[dict]:
+    def run(self, max_new_tokens: int = 70) -> None:
         """Execute the agent over all loaded prompts and write the results."""
         all_results = []
+        execution_result: dict[str, Any]
 
         for prompt_data in self.prompts:
             user_query = prompt_data.get("prompt")
