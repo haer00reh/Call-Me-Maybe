@@ -1,6 +1,6 @@
 from typing import Any, List, Optional, Sequence
 from pydantic import BaseModel, ConfigDict, Field
-from llm_sdk import Small_LLM_Model
+from .llm_sdk import Small_LLM_Model
 
 
 class LLMClient(BaseModel):

@@ -1,8 +1,8 @@
 import json
 import re
 from typing import Dict, List
-from model import LLMClient
-from utils import _normalize_numeric_values, parse_json, FSMState, Phase
+from .model import LLMClient
+from .utils import _normalize_numeric_values, parse_json, FSMState, Phase
 import argparse
 from pathlib import Path
 
@@ -17,17 +17,17 @@ class FunctionCallingAgent:
         parser.add_argument(
             "--functions_definition",
             type=Path,
-            default=Path("io/input/functions_definition.json")
+            default=Path("src/io/input/functions_definition.json")
         )
         parser.add_argument(
             "--input",
             type=Path,
-            default=Path("io/input/function_calling_tests.json")
+            default=Path("src/io/input/function_calling_tests.json")
         )
         parser.add_argument(
             "--output",
             type=Path,
-            default=Path("io/output/function_calling_results.json"))
+            default=Path("src/io/output/function_calling_results.json"))
         args = parser.parse_args()
         self.defines = parse_json(args.functions_definition)
         self.prompts = parse_json(args.input)

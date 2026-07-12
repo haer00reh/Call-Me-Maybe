@@ -1,6 +1,6 @@
 """Entry point for running the function-calling agent."""
 
-from func_agent import FunctionCallingAgent
+from .func_agent import FunctionCallingAgent
 
 
 def main():
