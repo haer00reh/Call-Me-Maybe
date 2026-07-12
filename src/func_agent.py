@@ -6,6 +6,7 @@ from utils import _normalize_numeric_values, parse_json, FSMState, Phase
 import argparse
 from pathlib import Path
 
+
 class FunctionCallingAgent:
     """Generate JSON function-call responses from prompts."""
 
@@ -14,9 +15,9 @@ class FunctionCallingAgent:
         self.llm_client = LLMClient()
         parser = argparse.ArgumentParser()
         parser.add_argument(
-        "--functions_definition",
-        type=Path,
-        default=Path("io/input/functions_definition.json")
+            "--functions_definition",
+            type=Path,
+            default=Path("io/input/functions_definition.json")
         )
         parser.add_argument(
             "--input",

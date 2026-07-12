@@ -7,8 +7,6 @@ def main():
     """Build the agent, register tools, and execute the prompt batch."""
     agent = FunctionCallingAgent()
 
-    
-
     agent.run()
 
 
