@@ -69,7 +69,7 @@ class FunctionCallingAgent:
             '{"function":"fn_divide","parameter":{"a":10.0,'
             '"b":3.0}}\n\n'
             'User query: "greet \'Alice\'"\n'
-            '{"function":"fn_greet","parameter":{"name":"Alice"}}\n\n'
+            '{"function":"fn_greet","parameter":{"s":"Alice"}}\n\n'
             f"User query: {user_query}\n"
         )
 

@@ -1,10 +1,3 @@
 [
-  {"prompt": "multiply 3.5 by 2"},
-  {"prompt": "what is the sum of 2.5 and 9.25"},
-  {"prompt": "subtract 4.5 from 10"},
-  {"prompt": "multiply 3.5 by 2"},
-  {"prompt": "divide 10 by 3"},
-  {"prompt": "divide 7.5 by 2.5"},
-  {"prompt": "greet 'Alice'"},
   {"prompt": "reverse 'hello'"}
 ]
