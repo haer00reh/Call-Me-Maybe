@@ -1,54 +1,10 @@
 import json
 import re
-from enum import Enum, auto
-from typing import Callable, Dict, List, Optional
-from pydantic import BaseModel, ConfigDict, Field
-
+from typing import Dict, List
 from model import LLMClient
-from utils import parse_json
-
-
-def _normalize_numeric_values(value):
-    """Convert integer values in nested structures to floats."""
-    if isinstance(value, dict):
-        return {
-            key: _normalize_numeric_values(inner_value)
-            for key, inner_value in value.items()
-        }
-    if isinstance(value, list):
-        return [_normalize_numeric_values(item) for item in value]
-    if isinstance(value, int) and not isinstance(value, bool):
-        return float(value)
-    return value
-
-
-def tool(func: Callable) -> Callable:
-    """Mark a function as available for function calling."""
-    func._is_tool = True
-    func._tool_name = func.__name__
-    return func
-
-
-class Phase(Enum):
-    """State machine phases for function-call generation."""
-
-    PREFIX = auto()
-    FUNCTION_NAME = auto()
-    PARAMETERS = auto()
-    DONE = auto()
-
-
-class FSMState(BaseModel):
-    """Track progress while building a function-call response."""
-
-    model_config = ConfigDict(validate_assignment=True)
-
-    phase: Phase = Phase.PREFIX
-    chosen_function: Optional[str] = None
-    current_param_index: int = 0
-    function_name_tokens: List[int] = Field(default_factory=list)
-    current_value_tokens: List[int] = Field(default_factory=list)
-
+from utils import _normalize_numeric_values, parse_json, FSMState, Phase
+import argparse
+from pathlib import Path
 
 class FunctionCallingAgent:
     """Generate JSON function-call responses from prompts."""
@@ -56,11 +12,25 @@ class FunctionCallingAgent:
     def __init__(self) -> None:
         """Load tools, prompts, and vocabulary metadata."""
         self.llm_client = LLMClient()
-        self._tools: Dict[str, Callable] = {}
-        self.defines = parse_json("io/input/functions_definition.json")
-        self.prompts = parse_json(
-            "io/input/function_calling_tests.json"
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+        "--functions_definition",
+        type=Path,
+        default=Path("io/input/functions_definition.json")
         )
+        parser.add_argument(
+            "--input",
+            type=Path,
+            default=Path("io/input/function_calling_tests.json")
+        )
+        parser.add_argument(
+            "--output",
+            type=Path,
+            default=Path("io/output/function_calling_results.json"))
+        args = parser.parse_args()
+        self.defines = parse_json(args.functions_definition)
+        self.prompts = parse_json(args.input)
+        self.output = args.output
         self.fsm = FSMState()
 
         vocab_path = self.llm_client.model.get_path_to_vocab_file()
@@ -79,19 +49,6 @@ class FunctionCallingAgent:
         self._quote_tokens = self._encode_tokens('"')
         self._function_key_tokens = self._encode_tokens('"function"')
         self._parameter_key_tokens = self._encode_tokens('"parameter"')
-
-    def register_tool(self, func: Callable) -> None:
-        """Register a single tool function."""
-        if not getattr(func, "_is_tool", False):
-            raise TypeError(
-                "Function must be decorated with @tool to be registered."
-            )
-        self._tools[func._tool_name] = func
-
-    def register_tools(self, tools: List[Callable]) -> None:
-        """Register multiple tool functions."""
-        for t in tools:
-            self.register_tool(t)
 
     def _format_prompt(self, user_query: str) -> str:
         """Build the prompt used to guide the language model."""
@@ -317,5 +274,5 @@ class FunctionCallingAgent:
 
                 all_results.append(record)
 
-        with open("io/output/function_calling_results.json", "w") as f:
+        with open(self.output, "w") as f:
             json.dump(all_results, f, indent=4)

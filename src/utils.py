@@ -1,5 +1,43 @@
 from pathlib import Path
 import json
+from enum import Enum, auto
+from typing import List, Optional
+from pydantic import BaseModel, ConfigDict, Field
+
+
+def _normalize_numeric_values(value):
+    """Convert integer values in nested structures to floats."""
+    if isinstance(value, dict):
+        return {
+            key: _normalize_numeric_values(inner_value)
+            for key, inner_value in value.items()
+        }
+    if isinstance(value, list):
+        return [_normalize_numeric_values(item) for item in value]
+    if isinstance(value, int) and not isinstance(value, bool):
+        return float(value)
+    return value
+
+
+class Phase(Enum):
+    """State machine phases for function-call generation."""
+
+    PREFIX = auto()
+    FUNCTION_NAME = auto()
+    PARAMETERS = auto()
+    DONE = auto()
+
+
+class FSMState(BaseModel):
+    """Track progress while building a function-call response."""
+
+    model_config = ConfigDict(validate_assignment=True)
+
+    phase: Phase = Phase.PREFIX
+    chosen_function: Optional[str] = None
+    current_param_index: int = 0
+    function_name_tokens: List[int] = Field(default_factory=list)
+    current_value_tokens: List[int] = Field(default_factory=list)
 
 
 def parse_json(file_path: str | Path) -> dict:
