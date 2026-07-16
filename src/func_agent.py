@@ -67,7 +67,7 @@ class FunctionCallingAgent:
                 f'  parameters: {params}'
             )
 
-        tools_desc = "\n".join(tools_desc)
+        tools_d = "\n".join(tools_desc)
         return (
             "You are a function-calling assistant.\n"
             "Return only valid JSON using the schema "
@@ -75,7 +75,7 @@ class FunctionCallingAgent:
             "Choose exactly one function from the tool list.\n"
             "Use the parameter keys from the tool schema.\n"
             "If a parameter type is boolean, output true or false..\n\n"
-            f"Tools:\n{tools_desc}\n\n"
+            f"Tools:\n{tools_d}\n\n"
             "Examples:\n"
             'User query: "greet \'Alice\'"\n'
             '{"function":"fn_greet","parameter":{"s":"Alice"}}\n\n'

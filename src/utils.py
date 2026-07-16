@@ -5,7 +5,7 @@ from typing import List, Optional, Any
 from pydantic import BaseModel, ConfigDict, Field
 
 
-def _normalize_numeric_values(value, schema=None):
+def _normalize_numeric_values(value: Any, schema: Any) -> Any | bool:
     """Convert values to floats only where the schema says 'number'."""
     if isinstance(value, dict):
         return {
