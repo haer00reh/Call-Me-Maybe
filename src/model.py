@@ -22,15 +22,6 @@ class LLMClient(BaseModel):
         """Encode a full string into a flat list of token IDs."""
         return self.model.encode(text)[0].tolist()
 
-    def encode_ids(self, lst: list) -> Any:
-        """Encode a list of characters into a flat list of token IDs."""
-        if not isinstance(lst, list):
-            raise TypeError("lst must be a list")
-        ids = []
-        for char in lst:
-            ids.extend(self.model.encode(char)[0].tolist())
-        return ids
-
     def decode(self, tokens: Sequence[int]) -> Any:
         """Decode a list of token IDs back to a string."""
         if not hasattr(tokens, "__iter__"):
