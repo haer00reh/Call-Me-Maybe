@@ -118,7 +118,7 @@ class FunctionCallingAgent:
                 "No allowed tokens available for greedy decoding."
             )
 
-        logits = self.llm_client.get_logits_from_input_ids(generated)
+        logits = self.llm_client.model.get_logits_from_input_ids(generated)
         best_token = allowed_ids[0]
         best_score = float("-inf")
         for token_id in allowed_ids:

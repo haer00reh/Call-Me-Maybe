@@ -36,7 +36,3 @@ class LLMClient(BaseModel):
         if not hasattr(tokens, "__iter__"):
             raise TypeError("tokens must be iterable of ints")
         return self.model.decode([int(x) for x in tokens])
-
-    def get_logits_from_input_ids(self, input_ids: List[int]) -> Any:
-        """Get logits for the next token given a list of token IDs."""
-        return self.model.get_logits_from_input_ids(input_ids)
