@@ -1,5 +1,5 @@
 [
-  {
+    {
     "name": "fn_add_numbers",
     "description": "Use ONLY when the user asks to add, sum, plus, total, increase by, or combine two numbers.",
     "parameters": {
@@ -9,46 +9,90 @@
     "returns": {"type": "number"}
   },
   {
-    "name": "fn_subtract_numbers",
-    "description": "Use ONLY when the user asks to subtract, minus, difference, deduct, take away, or remove one number from another",
-    "parameters": {
-      "a": {"type": "number"},
-      "b": {"type": "number"}
-    },
-    "returns": {"type": "number"}
-  },
-  {
     "name": "fn_multiply_numbers",
-    "description": "Use ONLY when the user asks to multiply, times, product, or repeated multiplication.",
+    "description": "Multiply two numbers together and return their product.",
     "parameters": {
-      "a": {"type": "number"},
-      "b": {"type": "number"}
+      "a": {
+        "type": "number"
+      },
+      "b": {
+        "type": "number"
+      }
     },
-    "returns": {"type": "number"}
+    "returns": {
+      "type": "number"
+    }
   },
   {
-    "name": "fn_divide",
-    "description": "Use ONLY when the user asks to divide, quotient, split equally, over, or per",
+    "name": "fn_is_even",
+    "description": "Check if an integer is even, returns True if even, False if odd.",
     "parameters": {
-      "a": {"type": "number"},
-      "b": {"type": "number"}
+      "n": {
+        "type": "integer"
+      }
     },
-    "returns": {"type": "number"}
+    "returns": {
+      "type": "boolean"
+    }
   },
   {
-    "name": "fn_greet",
-    "description": "returns a friendly greeting",
+    "name": "fn_calculate_compound_interest",
+    "description": "Calculate compound interest: principal * (1 + rate)^years.",
     "parameters": {
-      "name": {"type": "string"}
+      "principal": {
+        "type": "number"
+      },
+      "rate": {
+        "type": "number"
+      },
+      "years": {
+        "type": "integer"
+      }
     },
-    "returns": {"type": "string"}
+    "returns": {
+      "type": "number"
+    }
   },
   {
-    "name": "fn_reverse_string",
-    "description": "reverses a string",
+    "name": "fn_execute_sql_query",
+    "description": "Execute a SQL query on a specified database.",
     "parameters": {
-      "text": {"type": "string"}
+      "query": {
+        "type": "string"
+      },
+      "database": {
+        "type": "string"
+      }
     },
-    "returns": {"type": "string"}
+    "returns": {
+      "type": "string"
+    }
+  },
+  {
+    "name": "fn_read_file",
+    "description": "Read a file from the given path with specified encoding.",
+    "parameters": {
+      "path": {
+        "type": "string"
+      },
+      "encoding": {
+        "type": "string"
+      }
+    },
+    "returns": {
+      "type": "string"
+    }
+  },
+  {
+    "name": "fn_format_template",
+    "description": "Format a template string containing placeholders.",
+    "parameters": {
+      "template": {
+        "type": "string"
+      }
+    },
+    "returns": {
+      "type": "string"
+    }
   }
 ]

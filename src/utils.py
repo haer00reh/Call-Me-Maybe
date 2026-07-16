@@ -5,17 +5,22 @@ from typing import List, Optional, Any
 from pydantic import BaseModel, ConfigDict, Field
 
 
-def _normalize_numeric_values(value: dict[str, Any]) -> dict[str, Any]:
-    """Convert integer values in nested structures to floats."""
+def _normalize_numeric_values(value, schema=None):
+    """Convert values to floats only where the schema says 'number'."""
     if isinstance(value, dict):
         return {
-            key: _normalize_numeric_values(inner_value)
+            key: _normalize_numeric_values(
+                inner_value,
+                schema.get(key, {}) if schema else None
+            )
             for key, inner_value in value.items()
         }
     if isinstance(value, list):
-        return [_normalize_numeric_values(item) for item in value]
+        return [_normalize_numeric_values(item, schema) for item in value]
     if isinstance(value, int) and not isinstance(value, bool):
-        return float(value)
+        if schema and schema.get("type") == "number":
+            return float(value)
+        return value
     return value
 
 

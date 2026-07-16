@@ -54,21 +54,29 @@ class FunctionCallingAgent:
 
     def _format_prompt(self, user_query: str) -> str:
         """Build the prompt used to guide the language model."""
-        tools_desc = "\n".join(
-            f'- {f["name"]}: {f["description"]}' for f in self.defines
-        )
+        tools_desc = []
+
+        for f in self.defines:
+            params = ", ".join(
+                f"{name}: {info['type']}"
+                for name, info in f["parameters"].items()
+            )
+
+            tools_desc.append(
+                f'- {f["name"]}: {f["description"]}\n'
+                f'  parameters: {params}'
+            )
+
+        tools_desc = "\n".join(tools_desc)
         return (
             "You are a function-calling assistant.\n"
             "Return only valid JSON using the schema "
             "{\"function\":...,\"parameter\":...}.\n"
             "Choose exactly one function from the tool list.\n"
             "Use the parameter keys from the tool schema.\n"
-            "Copy parameter values as concise spans or numerals.\n\n"
+            "If a parameter type is boolean, output true or false..\n\n"
             f"Tools:\n{tools_desc}\n\n"
             "Examples:\n"
-            'User query: "divide 10 by 3"\n'
-            '{"function":"fn_divide","parameter":{"a":10.0,'
-            '"b":3.0}}\n\n'
             'User query: "greet \'Alice\'"\n'
             '{"function":"fn_greet","parameter":{"s":"Alice"}}\n\n'
             f"User query: {user_query}\n"
@@ -251,9 +259,11 @@ class FunctionCallingAgent:
         result = {
             "prompt": user_query,
             "function": fname,
-            "parameter": output_params,
+            "parameter": _normalize_numeric_values(
+                output_params, func_def["parameters"]
+            ),
         }
-        return _normalize_numeric_values(result)
+        return result
 
     def run(self, max_new_tokens: int = 70) -> None:
         """Execute the agent over all loaded prompts and write the results."""
