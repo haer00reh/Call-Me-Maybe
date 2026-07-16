@@ -15,20 +15,23 @@ class FunctionCallingAgent:
         """Load tools, prompts, and vocabulary metadata."""
         self.llm_client = LLMClient()
         parser = argparse.ArgumentParser()
+        default_out_path = Path("src/data/output/function_calling_results.json")
+        default_out_path.parent.mkdir(parents=True, exist_ok=True)
+
         parser.add_argument(
             "--functions_definition",
             type=Path,
-            default=Path("src/io/input/functions_definition.json")
+            default=Path("src/data/input/functions_definition.json")
         )
         parser.add_argument(
             "--input",
             type=Path,
-            default=Path("src/io/input/function_calling_tests.json")
+            default=Path("src/data/input/function_calling_tests.json")
         )
         parser.add_argument(
             "--output",
             type=Path,
-            default=Path("src/io/output/function_calling_results.json"))
+            default=Path(default_out_path))
         args = parser.parse_args()
         self.defines = parse_json(args.functions_definition)
         self.prompts = parse_json(args.input)
@@ -290,5 +293,5 @@ class FunctionCallingAgent:
 
                 all_results.append(record)
 
-        with open(self.output, "w") as f:
+        with open(self.output, "a") as f:
             json.dump(all_results, f, indent=4)
