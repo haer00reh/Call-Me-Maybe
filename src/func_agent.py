@@ -15,7 +15,8 @@ class FunctionCallingAgent:
         """Load tools, prompts, and vocabulary metadata."""
         self.llm_client = LLMClient()
         parser = argparse.ArgumentParser()
-        default_out_path = Path("src/data/output/function_calling_results.json")
+        default_out_path = Path("src/data/output/"
+                                "function_calling_results.json")
         default_out_path.parent.mkdir(parents=True, exist_ok=True)
 
         parser.add_argument(
