@@ -9,7 +9,7 @@ install:
 	poetry install
 
 debug:
-	uv run ${py} -m src
+	uv run ${py} -m pdb -m src
 
 clean:
 	@rm -rf */__pycache__
